@@ -16,6 +16,7 @@ import { PasswordHasher } from "./helper/passwordHasher.helper";
 
 import { Tokengeneration } from "./helper/tokenGeneration.helper";
 import { LoggerMiddleware } from "./middleware/loggerMiddleware";
+// import { ServeStaticMiddleware } from "./middleware/serveStaticFilkes.middleware";
 
 
 const services = [LoggerMiddleware ,UserDAO ,Tokengeneration,CheckAuth,PasswordCompare,PasswordHasher,EncryptionHelper,DecryptionHelper,BooksDAO]

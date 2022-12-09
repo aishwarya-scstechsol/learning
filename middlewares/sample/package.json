@@ -1,0 +1,21 @@
+{
+  "name": "sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sampleApp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "nodemon sampleApp.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.2.1",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "errorhandler": "^1.5.1",
+    "express-session": "^1.17.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.20"
+  }
+}

@@ -4,7 +4,7 @@ export class LoggerConstants {
     public static CREATE_USER_ERR = 'error while creating user'
     public static CREATE_USER_C = 'user creation initiated initiated at controller level'
 
-    
+    public static GET_STATIC_FILE = "get file initiated at controller level"
 
 
     public static LOGIN_C = 'login initiated initiated at controller level'
@@ -14,7 +14,7 @@ export class LoggerConstants {
 
     public static RETRIEVE_USERS_S = 'retrieval initiated at service level'
 
- 
+    public static SERVE_STATIC_FILES_MIDDLEWARE = "Serve static middle ware initiated"
 
 
     public static LOGIN_S = 'login initiated at service level'

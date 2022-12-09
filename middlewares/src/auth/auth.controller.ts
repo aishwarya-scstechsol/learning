@@ -1,4 +1,4 @@
-import { Post, Req, Body, ValidationPipe, Res, Logger, Controller, UseFilters, UseInterceptors, Param, Get } from "@nestjs/common"
+import { Post, Req, Body, ValidationPipe, Res, Logger, Controller, UseFilters, UseInterceptors, Param, Get, Session } from "@nestjs/common"
 import { ApiCreatedResponse } from "@nestjs/swagger"
 import { AppConfig } from "../core/config/app.config"
 
@@ -55,6 +55,25 @@ constructor (private readonly authService : AuthService,
             
         }
 
+
+        @Get('/files')
+        async getUserInformation(@Res() res )
+        {
+            // this.logger.log(LoggerConstants.GET_STATIC_FILE)
+            // res.sendFile("files/userInformation.txt",{root : "files/userInformation.txt"})
+        }
+        
+        @Get ( '/compression') 
+        async getResult (@Res() res,@Session()session )
+{
+    this.logger.log(LoggerConstants.GET_STATIC_FILE)
+    
+    session.visits = session.visits ? session.visits + 1 : 1;
+
+    // console.log(session)
+    res.send("middlewares /.".repeat(200000))
+
+}
 
 
 //         @Post('/boom')
