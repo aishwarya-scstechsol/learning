@@ -8,18 +8,22 @@ export class LoggerConstants {
 
 
     public static LOGIN_C = 'login initiated initiated at controller level'
-
+    public static GUARD_POLICIES = "policies gurard initiated"
 
     public static CREATE_USER_S = 'user creation initiated initiated at service level'
 
     public static RETRIEVE_USERS_S = 'retrieval initiated at service level'
-
+    public static KEY_GEN = 'key generation helper for encryption method initiated'
+    public static KEY_GEN_ERR ='error while generating key'
+    
+    
     public static SERVE_STATIC_FILES_MIDDLEWARE = "Serve static middle ware initiated"
 
 
     public static LOGIN_S = 'login initiated at service level'
     public static GUARD = 'roles guard initiated'
     public static GUARD_ERR = 'insufficient permissions'
+    public static GUARD_P = 'permissions guard initiated'
 
    
     public static USER_EXISTS = "method for checking if user already exists initiated"
@@ -91,11 +95,34 @@ export class LoggerConstants {
     public static VALIDATING_PAYLOAD = "validating payload method initiated"
     public static VALIDATING_PAYLOAD_ERR = 'error while validating payload'
 
+    public static SUPER_ADMIN = "method for checking if super admin already exists initiated"
+    public static SUPER_ADMIN_ERR = "super admin already exists"
+    public static CREATE_SUPER_ADMIN = "super admin creation method initiated"
+    public static SUPER_ADMIN_S = "super admin creation method initiated at service level"
+    public static SUPER_ADMIN_C = "super admin creation method initiated at controller level"
+    public static CREATE_SUPER_ADMIN_ERR = "error encountered while super admin creation"
+
+    public static CREATE_ADMIN = "admin creation method initiated"
+    public static ADMIN_S = "admin creation method initiated at service level"
+    public static ADMIN_C = "admin creation method initiated at controller level"
+    public static ADMIN_ERR = "error encountered while admin creation"
+
+
+    public static PERMISSION_UPDATE_C = "update permission initiated at the controller level"
+    public static PERMISSION_UPDATE_S = "update permission initiated at the service level"
+    public static PERMISSION_UPDATE = "update permission initiated "
+    public static PERMISSION_UPDATE_ERR = "error while updating permission "
 
 
     
-    
-    
+    public static POLICY_UPDATE_C = "update policy initiated at the controller level"
+    public static POLICY_UPDATE_S = "update policy initiated at the service level"
+    public static POLICY_UPDATE = "update policy initiated "
+    public static POLICY_UPDATE_ERR = "error while updating policy "
+
+
+
+
 
 
 

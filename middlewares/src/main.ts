@@ -8,6 +8,7 @@ import * as morgan from "morgan"
 import { AppConstants } from './core/constants/app.constants';
 import  { join } from 'path';
 import * as fs from "fs"
+import * as passport from "passport"
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors()
@@ -21,7 +22,10 @@ secret : AppConstants.SECRET_KEY,
 resave : false ,
 saveUninitialized: false,
     })
+
   )
+  app.use(passport.initialize())
+  app.use(passport.session())
   await app.listen(3000);
 
 

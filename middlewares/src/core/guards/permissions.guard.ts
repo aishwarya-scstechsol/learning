@@ -1,25 +1,25 @@
 import { CanActivate, ExecutionContext, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs";
-import { CheckAuth } from "../helper/checkAuth";
+
 //this import is made to acess methods in jsonwebtoken 
 import * as jwt from 'jsonwebtoken'
 import { AppConstants } from "../constants/app.constants";
 import { LoggerConstants } from "../constants/logger.constants";
 @Injectable()
-export class RolesGuard implements CanActivate{
-    private readonly logger = new Logger (RolesGuard.name)
-    constructor(private reflector :Reflector , private checkAuth : CheckAuth){}
+export class PermissionsGuard implements CanActivate{
+    private readonly logger = new Logger (PermissionsGuard.name)
+    constructor(private reflector :Reflector ){}
 
     
 canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
        try{
-        this.logger.log(LoggerConstants.GUARD)
-        const roles = this.reflector.get<String[]>('roles',context.getHandler())
+        this.logger.log(LoggerConstants.GUARD_P)
+        const permission = this.reflector.get<String[]>('permissions',context.getHandler())
       
 
         
-        if (!roles) {
+        if (!permission) {
            
             return true;
           }
@@ -27,7 +27,7 @@ canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<
           const request = context.switchToHttp().getRequest();
           const user = request.user
         
-          let reuslt =  this.matchRoles(roles , user.role)
+          let reuslt =  this.matchRoles(permission , user.permissions)
          return reuslt
             }
         
@@ -36,10 +36,10 @@ canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<
             throw new UnauthorizedException()
         }
     }
-    matchRoles(roles,requestedRole){
+    matchRoles(permissions,requestedPermisiions){
         let result  =false 
-        roles.forEach(element => {
-            if(element ===requestedRole)
+        permissions.forEach(element => {
+            if(element ===requestedPermisiions)
         result = true
         
         });

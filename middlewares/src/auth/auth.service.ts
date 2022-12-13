@@ -12,6 +12,7 @@ import { Tokengeneration } from "../core/helper/tokenGeneration.helper";
 import { DecryptionHelper } from "../core/helper/decryption.helper";
 import { async } from "rxjs";
 import { AppConfig } from "../core/config/app.config";
+import { AppConstants } from "src/core/constants/app.constants";
 
 
 @Injectable()
@@ -30,12 +31,39 @@ export class  AuthService{
         private readonly PasswordCompare : PasswordCompare,
         private readonly encrypt : EncryptionHelper
         ,
-        private readonly decrypt : DecryptionHelper
+        private readonly decrypt : DecryptionHelper,
+        
         
         
         
     ) { }
     
+/**create super admin
+ * 
+ * @param userInformation 
+ * @returns 
+ */
+createSuperAdmin = async (userInformation ) =>{
+    
+    this.logger.log(LoggerConstants.SUPER_ADMIN_S)
+    let password = await this.passwordHash.hashPassword(userInformation.password)
+    await this.user.userExists(userInformation.emailID)
+    await this.user.superAdminCheck(userInformation.role)
+    return await this.user.createSuperAdmin(userInformation,password)
+    }
+    
+/**create super admin
+ * 
+ * @param userInformation 
+ * @returns 
+ */
+createAdmin = async (userInformation ) =>{
+    
+    this.logger.log(LoggerConstants.ADMIN_S)
+    let password = await this.passwordHash.hashPassword(userInformation.password)
+    await this.user.userExists(userInformation.emailID)
+    return await this.user.createAdmin(userInformation,password)
+    }
 
 
 
@@ -47,66 +75,56 @@ export class  AuthService{
 createUser = async (userInformation ) =>{
     
     this.logger.log(LoggerConstants.CREATE_USER_S)
-    
-    
     let password = await this.passwordHash.hashPassword(userInformation.password)
     await this.user.userExists(userInformation.emailID)
-    let user = {name : userInformation.name , emailID : userInformation.emailID , role : userInformation.role}
-    
-    
-    let encryptedText = await this.encrypt.encrypt(JSON.stringify(user),this.iv,AppConfig.SECRET)
-    
-    return await this.user.createUser(encryptedText ,password)
-    }
-
-
-    login = async(credentials)=>{
-        this.logger.log(LoggerConstants.LOGIN_S)
-       
-       
-      
-                        let user = await this.user.user(credentials.emailID)
-                      
-                        let match : Boolean = await this.PasswordCompare.comparePassword(credentials.password ,user.password )
-                      
-                        if(match) {
-                        let token = await this.TokenGeneration.generateToken(user._id ,user.role)
-                        return {"token" : token}
-                        }
-                   
-
-    }
-// tryEncryption =async(information)=>{
-  
-//     this.logger.log("try encryption at service")
    
-//    let informationTOBeEncrypted =JSON.stringify(information)
-//     const encryptedText = await this.encrypt.encrypt(informationTOBeEncrypted , this.iv , "password")
+    return await this.user.createUser(userInformation,password)
+
+    }
+
+
+login = async(credentials)=>{
+    this.logger.log(LoggerConstants.LOGIN_S)
+    let user = await this.user.user(credentials.emailID)
+    let match : Boolean = await this.PasswordCompare.comparePassword(credentials.password ,user.password )
+    if(match) {
+    let token = await this.TokenGeneration.generateToken(user._id ,user.role)
+    return {"token" : token}
+}              
+
+}
+
+
+async updatePermisiions(id ,permissions){
+    this.logger.log(LoggerConstants.PERMISSION_UPDATE_S)
+    return await this.user.updatePermissions(id ,permissions)
     
+}
 
-// let id = await this.user.tryEncryption(encryptedText)
+async updatePolicies(id ,policy)
+{
+    this.logger.log(LoggerConstants.POLICY_UPDATE_S)
+    return await this.user.updatePolicy(id , policy)
+}
 
-// return id 
+googleLogin = async  (user)=>{
+    if (user){    
+
+        let result = await this.TokenGeneration.generateToken(user.user._id ,user.user.role)
+        
+    return { token : result}
+ }
+}
+ facebookLogin = async  (user)=>{
+    if (user){    
+
+        let result = await this.TokenGeneration.generateToken(user.user._id ,user.user.role)
+        
+    return { token : result}
+ }
 
 
 
-// }
-
-
-
-// retrieve =async(id)=>{
-//     this.logger.log('retrieving')
-//     let see = await this.user.find(id)
-
-//     let decryptedText = await this.decrypt.decrypt(see.information ,this.iv ,"password")
-//     this.logger.verbose(decryptedText)
-
-//     let seeq = decryptedText.toString()
-//    let  s =JSON.parse(seeq)
-
-// this.logger.error(s)
-    
-//     return s
-// }
+ }
 
 }

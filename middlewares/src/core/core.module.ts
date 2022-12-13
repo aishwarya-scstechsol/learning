@@ -11,6 +11,7 @@ import { UserDAO } from "./dao/users.dao";
 import { CheckAuth } from "./helper/checkAuth";
 import { DecryptionHelper } from "./helper/decryption.helper";
 import { EncryptionHelper } from "./helper/encryption.helper";
+import { KeyGenerationHelper } from "./helper/keyGeneration.helper";
 import { PasswordCompare } from "./helper/passwordCompare.helper";
 import { PasswordHasher } from "./helper/passwordHasher.helper";
 
@@ -19,7 +20,7 @@ import { LoggerMiddleware } from "./middleware/loggerMiddleware";
 // import { ServeStaticMiddleware } from "./middleware/serveStaticFilkes.middleware";
 
 
-const services = [LoggerMiddleware ,UserDAO ,Tokengeneration,CheckAuth,PasswordCompare,PasswordHasher,EncryptionHelper,DecryptionHelper,BooksDAO]
+const services = [KeyGenerationHelper,LoggerMiddleware ,UserDAO ,Tokengeneration,CheckAuth,PasswordCompare,PasswordHasher,EncryptionHelper,DecryptionHelper,BooksDAO]
 @Module({
     imports: [
        

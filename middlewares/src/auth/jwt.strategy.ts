@@ -24,10 +24,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload): Promise<any> {
     
     this.logger.log(LoggerConstants.VALIDATING_PAYLOAD)
+
     const user = await this.userModel.findOne({_id : payload._id
       
     })
-    
+  
     if(!user ){
       this.logger.error(LoggerConstants.VALIDATING_PAYLOAD)
 throw new HttpException(ExceptionConstants.UNAUTHORIZED ,HttpStatus.UNAUTHORIZED)

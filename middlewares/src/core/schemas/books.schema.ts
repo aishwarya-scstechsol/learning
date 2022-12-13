@@ -32,6 +32,12 @@ export class Books
     @Prop()
     updatedAt :Date
 
+    @Prop()
+    key : String 
+
+    @Prop()
+    information : String 
+
 
 
 }

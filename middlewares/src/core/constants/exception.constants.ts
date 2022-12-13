@@ -5,7 +5,8 @@ export class ExceptionConstants{
     public static USER_EXISTS_DESCRIPTION = "user with this emailID already exists , try signing in from a new emailID"
     
     public static UPDATE_ERR = "could not update"
-
+    public static COULDNOT_UPDATE = "permission could not be updated"
+    public static COULDNOT_UPDATE_POLICY = "policy could not be updated"
     public static DELETE_ERR = "could not delete"
     public static UNAUTHORIZED = "unauthorized"
     public static ID_ERR = "please enter a valid mongoDB ID"
@@ -17,4 +18,6 @@ export class ExceptionConstants{
     public static ONLY_IMAGES = "only images are allowed"
     public static PROPER_FILE = "please provide a jpg  or jpeg or png file"
     public static INVALID_CREDENTIALS  = "INVALID_CREDENTIALS"
+    public static KEY = 'couldnot generate key'
+    public static SUPER_ADMIN = "there can only be one super admin per account"
 }

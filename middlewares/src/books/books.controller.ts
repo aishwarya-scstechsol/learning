@@ -1,4 +1,4 @@
-import { UseGuards, UseInterceptors, UseFilters, Controller, Logger, Get, StreamableFile, Post, Body, Put, Res, Param, Delete, UploadedFile, ParseFilePipe } from "@nestjs/common"
+import { UseGuards, UseInterceptors, UseFilters, Controller, Logger, Get, StreamableFile, Post, Body, Put, Res, Param, Delete, UploadedFile, ParseFilePipe, ValidationPipe, Req } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
 import { ApiTags } from "@nestjs/swagger"
 import { AppConfig } from "../core/config/app.config"
@@ -16,8 +16,11 @@ import { BooksDTO } from "../core/dto/books.dto"
 import { CurrentUser } from '../core/decorator/user.decorator';
 import { FileInterceptor } from "@nestjs/platform-express"
 import { FileValidationPipe } from "../core/pipes/file.validationm.pipe"
+import { PermissionsDecorator } from "src/core/decorator/permissions.decorator"
+import { Permissions, Policies } from "src/core/constants/enum.constants"
+import { PoliciesDecorator } from "src/core/decorator/policies.decorator"
 
-@UseGuards(AuthGuard())
+
 @UseInterceptors(LoggingInterceptor)
 @UseFilters(new HttpExceptionFilter())
 @ApiTags(AppConstants.TAG)
@@ -29,38 +32,48 @@ private readonly logger = new Logger(BooksController.name)
        
         private readonly booksService: BooksService) { }
 
-@UseInterceptors(FileInterceptor(AppConstants.IMAGE , {dest : '/a'}))
-@RolesDecorator(AppConstants.ADMIN)
+@UseInterceptors(FileInterceptor(AppConstants.IMAGE , {dest : AppConstants.DEST}))
+@PoliciesDecorator(Policies.ALL,Policies.BOOK)
+@PermissionsDecorator(Permissions.WRITE)
 @Post(AppConfig.CREATE_BOOK)
-async createBook(@UploadedFile(new FileValidationPipe()) file: Express.Multer.File,@Body() book : BooksDTO , @CurrentUser() user ){
+@UseGuards(AuthGuard())
+async createBook(@UploadedFile(new FileValidationPipe()) file: Express.Multer.File,@Body(new ValidationPipe({skipMissingProperties : false})) book : BooksDTO , @CurrentUser() user ){
     this.logger.log(LoggerConstants.CREATE_BOOK_C)
     
-    return await this.booksService.createBook(book,user,file)
+     await this.booksService.createBook(book,user,file)
+     return AppConstants.CREATED_BOOK
 }
        
 
+@UseGuards(AuthGuard())
 @Get(AppConfig.GET_BOOKS)
-async getBooks() {
+async getBooks(@CurrentUser() user ) {
+
 this.logger.log(LoggerConstants.GET_BOOK_C)
 return this.booksService.getBooks()
 }
-@Get(AppConfig.GET_BOOK_BY_ID)
-async getBookByID(@Param (AppConfig.ID) id )  {
-    this.logger.log(LoggerConstants.GET_BOOK_BY_ID_C)
-    return this.booksService.getBooksById(id.id)
-}
-@RolesDecorator(AppConstants.ADMIN)
-@Put(AppConfig.UPDATE_BOOK)
-async updateBook(@Body () book ,@Param (AppConfig.ID) id  ) {
-    this.logger.log(LoggerConstants.UPDATE_BOOK_C)
-    return this.booksService.updateBook(book , id.id)
-}
-@RolesDecorator(AppConstants.ADMIN)
-@Delete(AppConfig.DELETE_BOOK)
-async deleteBook(@Param (AppConfig.ID) id ) {
-    this.logger.log(LoggerConstants.DELETE_BOOK_C)
-    return this.booksService.deleteBook(id.id)
-}
+
+
+// @Get(AppConfig.GET_BOOK_BY_ID)
+// async getBookByID(@Param (AppConfig.ID) id )  {
+//     this.logger.log(LoggerConstants.GET_BOOK_BY_ID_C)
+//     return this.booksService.getBooksById(id.id)
+// }
+
+// @RolesDecorator(AppConstants.ADMIN)
+// @Put(AppConfig.UPDATE_BOOK)
+// async updateBook(@Body () book ,@Param (AppConfig.ID) id  ) {
+//     this.logger.log(LoggerConstants.UPDATE_BOOK_C)
+//     await  this.booksService.updateBook(book , id.id)
+//     return AppConstants.UPDATED
+// }
+// @RolesDecorator(AppConstants.ADMIN)
+// @Delete(AppConfig.DELETE_BOOK)
+// async deleteBook(@Param (AppConfig.ID) id ) {
+//     this.logger.log(LoggerConstants.DELETE_BOOK_C)
+//     await this.booksService.deleteBook(id.id)
+//     return AppConstants.DELETED
+// }
 
 
 
@@ -78,4 +91,9 @@ async deleteBook(@Param (AppConfig.ID) id ) {
 
 }
     
+
+
+
+
+
 

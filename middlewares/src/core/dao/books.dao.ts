@@ -17,13 +17,14 @@ export class BooksDAO implements IBooksDAO {
 
 
 
-    createBook = async (book,user,file)=> {
+    createBook = async (book,user,key)=> {
         try{
             
             this.logger.log(LoggerConstants.CREATE_BOOK)
             let newBook = await this.booksModel.create({
-                
-                name : book.name , author : book.author , image : file.originalname , pages : book.pages , price : book.price,createdBy : user._id,createdAt  : Date.now() ,updatedAt : Date.now()
+                information : book ,
+                key : key , 
+                createdBy : user._id,createdAt  : Date.now() ,updatedAt : Date.now()
             })
             return newBook
             
@@ -55,6 +56,22 @@ export class BooksDAO implements IBooksDAO {
         throw new HttpException(ExceptionConstants.NO_RECORD_FOUND,HttpStatus.NOT_FOUND)
     }
     }
+
+
+
+    getBooks=async ()=> {
+        try{
+            this.logger.log(LoggerConstants.GET_BOOK)
+            let books = await this.booksModel.find()
+            
+            return books
+    
+        }
+        catch(e){
+            this.logger.error(LoggerConstants.GET_BOOK_ERR)
+            throw new HttpException(ExceptionConstants.NO_RECORD_FOUND,HttpStatus.NOT_FOUND)
+        }
+        }
     getBookByID=async(id: any)=> {
         try{
             this.logger.log(LoggerConstants.GET_BOOK_BY_ID)
@@ -79,7 +96,7 @@ export class BooksDAO implements IBooksDAO {
         try{
             await this.getBookByID(id)
 
-            return await this.booksModel.updateOne({_id : id } , {"$set" : {price : book.price , image : "waitss" , pages : book.pages , name : book.name , author : book.author}})
+            return await this.booksModel.updateOne({_id : id } , {"$set" : {price : book.price  , pages : book.pages , name : book.name , author : book.author}})
 
     
         }
@@ -104,7 +121,8 @@ export class BooksDAO implements IBooksDAO {
    bookExists= async (name)=>{
 try{
 this.logger.log(LoggerConstants.BOOK_EXISTS)
-let book = await this.booksModel.find({name :  name })
+let names = [name]
+let book = await this.booksModel.find({name :  names })
 
 if(book.length!=0){
     this.logger.error(LoggerConstants.BOOK_EXISTS_ERR)

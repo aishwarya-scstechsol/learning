@@ -50,7 +50,7 @@ export class UsersDTO {
 
     @ApiProperty()
     @IsNotEmpty()
-    @IsEnum([Roles.ADMIN,Roles.USER])
+    @IsEnum([Roles.USER],{message : `role can only be ${Roles.USER} `})
     role : String 
 
 
